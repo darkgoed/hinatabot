@@ -18,6 +18,15 @@ import "../panels/staff/painelResolverDisputa";
 
 import "../panels/staff/painelWO";
 
+import "../panels/shared/painelRefresh";
+
+import "../panels/staff/painelAddPlayer";
+
+import "../panels/staff/painelProximaPartida";
+
+import "../panels/staff/painelFixThreads";
+
+
 
 // PLAYER
 import "../panels/player/painelInscricao";

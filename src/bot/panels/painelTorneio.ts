@@ -10,6 +10,15 @@ import { getNextRoundNumber } from "../../core/bracket/advanceRound";
 // Se você tiver matchStore, use. Se não tiver ainda, pode comentar esse import
 import { matchStore } from "../../core/store/matches";
 
+function isTournamentStaff(interaction: any, staffRoleName: string) {
+  const isAdmin = interaction.memberPermissions?.has?.("Administrator") === true;
+  const hasRole =
+    interaction.member?.roles?.cache?.some((r: any) => r.name === staffRoleName) === true;
+
+  return isAdmin || hasRole;
+}
+
+
 function prettyStatus(status: string) {
   const map: Record<string, string> = {
     DRAFT: "🧪 DRAFT",
@@ -41,7 +50,7 @@ function embedColorByStatus(status: string) {
 }
 
 export function buildPainelPayload(interaction: any, staffRoleName: string): InteractionReplyOptions {
-  const isStaff = interaction.memberPermissions?.has?.("Administrator") || false; // simples por enquanto
+  const isStaff = isTournamentStaff(interaction, staffRoleName);
   const t = db.getTournament();
 
   const embed = new EmbedBuilder()
@@ -252,7 +261,32 @@ export function buildPainelPayload(interaction: any, staffRoleName: string): Int
         .setDisabled(!canFinish),
     );
 
-    return { embeds: [embed], components: [row1, row2], ephemeral: true };
+    const row3 = new ActionRowBuilder<ButtonBuilder>().addComponents(
+      new ButtonBuilder()
+        .setCustomId("panel:refresh")
+        .setLabel("Atualizar painel")
+        .setEmoji("🔄")
+        .setStyle(ButtonStyle.Secondary),
+
+      new ButtonBuilder()
+        .setCustomId("staff:add_player")
+        .setLabel("➕ Adicionar player")
+        .setStyle(ButtonStyle.Success),
+
+      new ButtonBuilder()
+        .setCustomId("staff:next_match")
+        .setLabel("➡️ Próxima partida")
+        .setStyle(ButtonStyle.Success),
+
+      new ButtonBuilder()
+        .setCustomId("staff:fix_threads")
+        .setLabel("🧵 Criar threads faltantes")
+        .setStyle(ButtonStyle.Secondary),
+
+
+    );
+
+    return { embeds: [embed], components: [row1, row2, row3], ephemeral: true };
   }
 
   // =========================

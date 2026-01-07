@@ -1,22 +1,34 @@
-export type MatchStatus = "PENDENTE" | "AGUARDANDO_CONFIRMACAO" | "DISPUTA" | "FINALIZADO";
+export type MatchStatus =
+  | "AGUARDANDO_JOGADORES"
+  | "PENDENTE"
+  | "AGUARDANDO_CONFIRMACAO"
+  | "DISPUTA"
+  | "FINALIZADO";
+
 
 export interface Match {
   id: string;
-  round: number;        // 1 = primeira rodada
-  position: number;     // ordem dentro da rodada
+  round: number;
+  position: number;
 
-  playerAId: string;    // userId do capitão A
-  playerBId: string;    // userId do capitão B
+  playerAId: string; // pode ser "TBD"
+  playerBId: string; // pode ser "TBD"
 
-  scoreA?: number;      // MD3: vitórias (0-2)
+  // NOVO: ligações do bracket
+  sourceMatchAId?: string; // match que alimenta o lado A
+  sourceMatchBId?: string; // match que alimenta o lado B
+
+  status: MatchStatus; // adicione "AGUARDANDO_JOGADORES"
+  winnerId?: string;
+
+  scoreA?: number;
   scoreB?: number;
-
-  reportedBy?: string;  // userId
-  status: MatchStatus;
 
   threadId?: string;
   createdAt: number;
   updatedAt: number;
-  
-  winnerId?: string; // userId do vencedor (ou "BYE" não precisa)
+
+  reportedBy?: string;      // userId de quem reportou (capitão) ou decidiu (staff)
+  reportReason?: string;    // opcional: motivo (WO/disputa)
 }
+

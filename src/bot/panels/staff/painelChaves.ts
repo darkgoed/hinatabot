@@ -1,7 +1,7 @@
 import { registerButton } from "../../interactions/registry";
 import { db } from "../../../core/store/db";
 import { matchStore } from "../../../core/store/matches";
-import { generateSingleElim } from "../../../core/bracket/generateSingleElim";
+import { generateFullSingleElim } from "../../../core/bracket/generateFullSingleElim";
 import { upsertChavesMessage } from "../../publishers/chavesMessage";
 import { createThreadsForMatches } from "../../publishers/matchThreads";
 import { MessageFlags } from "discord.js";
@@ -26,7 +26,7 @@ registerButton("staff:generate_bracket", async (i) => {
   try {
     matchStore.reset();
 
-    const matches = generateSingleElim(regs);
+    const matches = generateFullSingleElim(regs);
     for (const m of matches) matchStore.upsert(m);
 
     await upsertChavesMessage(i.client, matches);
