@@ -6,29 +6,38 @@ export type MatchStatus =
   | "FINALIZADO";
 
 
+export interface MatchTeamInfo {
+  name?: string;        // nome do time (se tiver)
+  members?: string[];   // nicks (VBL) do time
+}
+
 export interface Match {
   id: string;
   round: number;
   position: number;
 
-  playerAId: string; // pode ser "TBD"
-  playerBId: string; // pode ser "TBD"
+  // capitães (usados pra permissões e menção)
+  playerAId: string; // captain userId
+  playerBId: string; // captain userId
 
-  // NOVO: ligações do bracket
-  sourceMatchAId?: string; // match que alimenta o lado A
-  sourceMatchBId?: string; // match que alimenta o lado B
+  // ✅ NOVO: dados do time (pra exibir 2v2/3v3 etc)
+  teamA?: MatchTeamInfo;
+  teamB?: MatchTeamInfo;
 
-  status: MatchStatus; // adicione "AGUARDANDO_JOGADORES"
+  // restante...
+  status: MatchStatus;
   winnerId?: string;
-
   scoreA?: number;
   scoreB?: number;
-
+  reportedBy?: string;
+  reportReason?: string;
   threadId?: string;
   createdAt: number;
   updatedAt: number;
 
-  reportedBy?: string;      // userId de quem reportou (capitão) ou decidiu (staff)
-  reportReason?: string;    // opcional: motivo (WO/disputa)
+  // se você já está usando bracket full:
+  sourceMatchAId?: string;
+  sourceMatchBId?: string;
 }
+
 
